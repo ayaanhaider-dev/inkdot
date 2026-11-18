@@ -1,0 +1,18 @@
+<!-- Line icons on a 24×24 grid, drawn with a 1.8 stroke. -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Screen on a stand -->
+  <StreamGeometry x:Key="Icon.Area">M3.5,4.5 H20.5 V16.5 H3.5 Z M8.5,20 H15.5 M12,16.5 V20</StreamGeometry>
+  <!-- A curve on axes -->
+  <StreamGeometry x:Key="Icon.Pressure">M4,4 V20 H20 M7,17 C11,17 13,7 19,6</StreamGeometry>
+  <!-- Pen with a side button -->
+  <StreamGeometry x:Key="Icon.Buttons">M16.5,3.5 L20.5,7.5 L9,19 L4,20 L5,15 Z M14,6 L18,10 M9.5,12.5 L11.5,14.5</StreamGeometry>
+  <!-- Stacked layers -->
+  <StreamGeometry x:Key="Icon.Presets">M12,3.5 L20.5,8 L12,12.5 L3.5,8 Z M3.5,12 L12,16.5 L20.5,12 M3.5,16 L12,20.5 L20.5,16</StreamGeometry>
+  <!-- Info -->
+  <StreamGeometry x:Key="Icon.About">M12,3.5 A8.5,8.5 0 1,1 11.99,3.5 Z M12,11 V16.5 M12,7.6 V8</StreamGeometry>
+  <!-- Grid of apps -->
+  <StreamGeometry x:Key="Icon.AllApps">M4,4 H10 V10 H4 Z M14,4 H20 V10 H14 Z M4,14 H10 V20 H4 Z M14,14 H20 V20 H14 Z</StreamGeometry>
+  <!-- Plus -->
+  <StreamGeometry x:Key="Icon.Plus">M12,5 V19 M5,12 H19</StreamGeometry>
+</ResourceDictionary>

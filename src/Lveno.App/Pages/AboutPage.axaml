@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Lveno.App.Pages.AboutPage">
+  <StackPanel Spacing="20">
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="label" Text="ABOUT" />
+      <StackPanel Orientation="Horizontal" Spacing="10">
+        <TextBlock Classes="h1" Text="InkDot" />
+        <TextBlock Classes="body muted" Text="by Lveno" VerticalAlignment="Bottom" Margin="0,0,0,4" />
+      </StackPanel>
+      <TextBlock x:Name="Version" Classes="mono muted" />
+    </StackPanel>
+
+    <Border Classes="card" Padding="0">
+      <StackPanel>
+        <Grid ColumnDefinitions="160,*" Margin="20,14">
+          <TextBlock Classes="label" Text="TABLET" VerticalAlignment="Center" />
+          <TextBlock x:Name="TabletName" Grid.Column="1" Classes="body" />
+        </Grid>
+        <Border Classes="divider" />
+        <Grid ColumnDefinitions="160,*" Margin="20,14">
+          <TextBlock Classes="label" Text="SURFACE" VerticalAlignment="Center" />
+          <TextBlock x:Name="Surface" Grid.Column="1" Classes="mono" />
+        </Grid>
+        <Border Classes="divider" />
+        <Grid ColumnDefinitions="160,*" Margin="20,14">
+          <TextBlock Classes="label" Text="SCREENS" VerticalAlignment="Center" />
+          <TextBlock x:Name="ScreenCount" Grid.Column="1" Classes="body" />
+        </Grid>
+        <Border Classes="divider" />
+        <Grid ColumnDefinitions="160,*,Auto" Margin="20,10">
+          <TextBlock Classes="label" Text="SETTINGS" VerticalAlignment="Center" />
+          <TextBlock x:Name="SettingsPath" Grid.Column="1" Classes="mono muted" VerticalAlignment="Center"
+                     TextTrimming="CharacterEllipsis" />
+          <Button x:Name="OpenFolderButton" Grid.Column="2" Classes="ghost" Content="Show in Finder" Margin="12,0,0,0" />
+        </Grid>
+      </StackPanel>
+    </Border>
+
+    <Border Classes="card">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="2">
+          <TextBlock Classes="h2" Text="Start at login" />
+          <TextBlock x:Name="LoginHint" Classes="body muted" FontSize="13"
+                     Text="Lveno starts in the menu bar when you log in, so the pen just works." />
+        </StackPanel>
+        <ToggleSwitch x:Name="StartAtLogin" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <Button x:Name="RedetectButton" Classes="ghost" Content="Look for tablets again" />
+      <Button x:Name="RestartButton" Classes="ghost" Content="Restart driver" />
+    </StackPanel>
+
+    <!-- Credits: small, at the bottom -->
+    <StackPanel Spacing="3" Margin="2,8,0,0">
+      <StackPanel Orientation="Horizontal" Spacing="4">
+        <TextBlock Classes="body muted" FontSize="12" Text="Driver: OpenTabletDriver, GNU LGPL v3 ·" />
+        <Button x:Name="SourceLink" Classes="link" FontSize="12" Content="source code" />
+      </StackPanel>
+      <TextBlock Classes="body muted" FontSize="12" Text="Set in Geist and Geist Mono, SIL Open Font License 1.1." />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

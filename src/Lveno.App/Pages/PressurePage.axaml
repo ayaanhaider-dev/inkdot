@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="using:Lveno.App.Controls"
+             x:Class="Lveno.App.Pages.PressurePage">
+  <!-- Not inside a ScrollViewer: drawing on the pad must never move the page. -->
+  <Grid RowDefinitions="Auto,*">
+
+    <StackPanel Spacing="6" Margin="0,0,0,20">
+      <TextBlock Classes="label" Text="PRESSURE" />
+      <TextBlock Classes="h1" Text="Set how the pen feels." />
+    </StackPanel>
+
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,24,*">
+
+      <!-- Left: curve with presets, test pad under it -->
+      <Grid RowDefinitions="Auto,14,*">
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <Border Classes="card" Padding="6">
+            <c:CurveView x:Name="Curve" Width="300" Height="300" />
+          </Border>
+          <StackPanel x:Name="Presets" Spacing="8" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <Border Grid.Row="2" Classes="card" Padding="6">
+          <Panel>
+            <c:TestPad x:Name="Pad" MinHeight="100" />
+            <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8">
+              <Button x:Name="CalibrateButton" Classes="ghost" Content="Calibrate" FontSize="12" Padding="12,5" />
+              <Button x:Name="ClearButton" Classes="ghost" Content="Clear" FontSize="12" Padding="12,5" />
+            </StackPanel>
+
+            <!-- Calibration guide. Doesn't take clicks, so you draw on the pad right through it. -->
+            <Border x:Name="CalOverlay" IsVisible="False" IsHitTestVisible="False"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="{DynamicResource Lv.Plate}" BorderBrush="{StaticResource Lv.Ember}" BorderThickness="1.5"
+                    CornerRadius="14" Padding="20,14" MaxWidth="320">
+              <StackPanel Spacing="4">
+                <TextBlock x:Name="CalStep" Classes="label accent" HorizontalAlignment="Center" />
+                <TextBlock x:Name="CalTitle" Classes="h2" TextAlignment="Center" TextWrapping="Wrap" />
+                <TextBlock x:Name="CalHint" Classes="body muted" FontSize="13" LineHeight="18" TextAlignment="Center" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+          </Panel>
+        </Border>
+      </Grid>
+
+      <!-- Right: switches and the live gauge -->
+      <Grid Grid.Column="2" RowDefinitions="Auto,18,Auto,8,Auto,*,Auto">
+        <Border Classes="card" Padding="0">
+          <StackPanel>
+            <Grid ColumnDefinitions="*,Auto" Margin="18,14">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Pressure" />
+                <TextBlock Classes="body muted" FontSize="13" LineHeight="18" TextWrapping="Wrap"
+                           Text="Off sends full strength on every touch." />
+              </StackPanel>
+              <ToggleSwitch x:Name="PressureOn" Grid.Column="1" OnContent="" OffContent="" IsChecked="True"
+                            VerticalAlignment="Center" Margin="10,0,0,0" />
+            </Grid>
+            <Border Classes="divider" />
+            <Grid ColumnDefinitions="*,Auto" Margin="18,14">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Mouse mode" />
+                <TextBlock Classes="body muted" FontSize="13" LineHeight="18" TextWrapping="Wrap"
+                           Text="The pen moves the cursor like a mouse, from where it is." />
+              </StackPanel>
+              <ToggleSwitch x:Name="MouseModeOn" Grid.Column="1" OnContent="" OffContent=""
+                            VerticalAlignment="Center" Margin="10,0,0,0" />
+            </Grid>
+            <StackPanel x:Name="MouseSpeedPanel" Spacing="0" Margin="18,0,18,12" IsVisible="False">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Classes="body" FontSize="13" Text="Speed" />
+                <TextBlock x:Name="MouseSpeedValue" Grid.Column="1" Classes="mono" />
+              </Grid>
+              <Slider x:Name="MouseSpeed" Minimum="2" Maximum="40" Value="10" TickFrequency="1" IsSnapToTickEnabled="True" />
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <TextBlock Grid.Row="2" Classes="label" Text="CURRENT PRESSURE" />
+
+        <Border Grid.Row="4" Classes="card" Padding="16,18,16,12">
+          <StackPanel Spacing="6">
+            <c:PressureGauge x:Name="Gauge" Height="150" />
+            <TextBlock x:Name="LiveState" Classes="label" Text="PEN AWAY" HorizontalAlignment="Center" />
+          </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="6" ColumnDefinitions="*,10,*">
+          <Button x:Name="RevertButton" Classes="ghost" Content="Undo" HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Center" />
+          <Button x:Name="ApplyButton" Grid.Column="2" Classes="primary" Content="Apply"
+                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" />
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

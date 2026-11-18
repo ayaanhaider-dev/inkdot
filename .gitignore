@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+build/
+dist/
+*.dmg
+
+# Tools
+.venv-dmg/
+.vs/
+.idea/
+.vscode/
+*.user
+
+# macOS
+.DS_Store

@@ -1,0 +1,222 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="using:Lveno.App.Controls"
+             x:Class="Lveno.App.Pages.OnboardingView"
+             Background="{DynamicResource Lv.Bg}">
+
+  <UserControl.Styles>
+    <!-- Steps slide and fade in. -->
+    <Style Selector="StackPanel.step">
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.28" Easing="CubicEaseOut" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.32" Easing="CubicEaseOut" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Border.progress">
+      <Setter Property="Height" Value="4" />
+      <Setter Property="Width" Value="34" />
+      <Setter Property="CornerRadius" Value="2" />
+      <Setter Property="Background" Value="{DynamicResource Lv.Line}" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.25" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Border.progress.done">
+      <Setter Property="Background" Value="{DynamicResource Lv.Fg}" />
+    </Style>
+    <Style Selector="Border.progress.now">
+      <Setter Property="Background" Value="{StaticResource Lv.Ember}" />
+    </Style>
+    <Style Selector="Border.check">
+      <Setter Property="Width" Value="22" />
+      <Setter Property="Height" Value="22" />
+      <Setter Property="CornerRadius" Value="11" />
+      <Setter Property="BorderThickness" Value="1.5" />
+      <Setter Property="BorderBrush" Value="{DynamicResource Lv.Line}" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.2" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Border.check.on">
+      <Setter Property="Background" Value="{StaticResource Lv.Ember}" />
+      <Setter Property="BorderBrush" Value="{StaticResource Lv.Ember}" />
+    </Style>
+    <Style Selector="Button.feel">
+      <Setter Property="Width" Value="150" />
+      <Setter Property="Height" Value="112" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="Background" Value="{DynamicResource Lv.Plate}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource Lv.Line}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button.feel:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Lv.Hover}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource Lv.Muted}" />
+    </Style>
+    <Style Selector="Button.feel.active /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="BorderBrush" Value="{StaticResource Lv.Ember}" />
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+  </UserControl.Styles>
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="40,52,40,32">
+
+    <!-- Progress -->
+    <Grid ColumnDefinitions="*,Auto,*">
+      <TextBlock Classes="label" Text="INKDOT  ·  BY LVENO" VerticalAlignment="Center" />
+      <StackPanel x:Name="Progress" Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" />
+      <Button x:Name="SkipButton" Grid.Column="2" Classes="link" Content="Skip" HorizontalAlignment="Right"
+              Foreground="{DynamicResource Lv.Muted}" />
+    </Grid>
+
+    <!-- Steps -->
+    <Panel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="640">
+
+      <!-- 0 · Welcome -->
+      <StackPanel x:Name="StepWelcome" Classes="step" Spacing="14" HorizontalAlignment="Center">
+        <c:LvenoDot x:Name="WelcomeDot" Width="150" Height="150" HorizontalAlignment="Center" Margin="0,0,0,14" />
+        <TextBlock Classes="display" FontSize="44" LetterSpacing="-2.4" Text="Meet InkDot." HorizontalAlignment="Center" />
+        <TextBlock Classes="body muted" FontSize="16" TextAlignment="Center" MaxWidth="440"
+                   Text="A calmer, smarter driver for your pen tablet. Let's set it up together. It takes a minute." />
+        <TextBlock Classes="label" Text="BY LVENO" HorizontalAlignment="Center" Margin="0,6,0,0" />
+      </StackPanel>
+
+      <!-- 1 · Permissions -->
+      <StackPanel x:Name="StepPermissions" Classes="step" Spacing="12" Width="520" IsVisible="False">
+        <c:LvenoDot x:Name="PermDot" Width="96" Height="96" HorizontalAlignment="Center" Margin="0,0,0,8" />
+        <TextBlock Classes="h1" FontSize="30" Text="Two quick permissions." HorizontalAlignment="Center" />
+        <TextBlock Classes="body muted" TextAlignment="Center"
+                   Text="macOS asks before any app reads a pen or moves the cursor. Allow both and I'll take it from there." />
+        <Border Classes="card" Padding="18,14" Margin="0,10,0,0">
+          <Grid ColumnDefinitions="Auto,14,*,Auto">
+            <Border x:Name="InputCheck" Classes="check" VerticalAlignment="Center">
+              <Path Data="M5,11 L9,15 L17,7" Stroke="{StaticResource Lv.Ink}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" Stretch="None" />
+            </Border>
+            <StackPanel Grid.Column="2" Spacing="2">
+              <TextBlock Classes="h2" Text="Input Monitoring" />
+              <TextBlock Classes="body muted" FontSize="13" Text="So I can feel your pen." />
+            </StackPanel>
+            <Button x:Name="InputAllow" Grid.Column="3" Classes="ghost" Content="Allow" VerticalAlignment="Center" />
+          </Grid>
+        </Border>
+        <Border Classes="card" Padding="18,14">
+          <Grid ColumnDefinitions="Auto,14,*,Auto">
+            <Border x:Name="AccessCheck" Classes="check" VerticalAlignment="Center">
+              <Path Data="M5,11 L9,15 L17,7" Stroke="{StaticResource Lv.Ink}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" Stretch="None" />
+            </Border>
+            <StackPanel Grid.Column="2" Spacing="2">
+              <TextBlock Classes="h2" Text="Accessibility" />
+              <TextBlock Classes="body muted" FontSize="13" Text="So I can move your cursor." />
+            </StackPanel>
+            <Button x:Name="AccessAllow" Grid.Column="3" Classes="ghost" Content="Allow" VerticalAlignment="Center" />
+          </Grid>
+        </Border>
+        <TextBlock x:Name="PermHint" Classes="mono muted" FontSize="11" TextAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Already ticked in System Settings? Remove InkDot with −, then add it again." />
+      </StackPanel>
+
+      <!-- 2 · Say hi with the pen -->
+      <StackPanel x:Name="StepPen" Classes="step" Spacing="12" Width="520" IsVisible="False">
+        <c:LvenoDot x:Name="PenDot" Width="170" Height="170" HorizontalAlignment="Center" Margin="0,0,0,6" />
+        <TextBlock x:Name="PenTitle" Classes="h1" FontSize="30" Text="Say hi with your pen." HorizontalAlignment="Center" />
+        <TextBlock x:Name="PenBody" Classes="body muted" TextAlignment="Center"
+                   Text="Hover the pen just above the tablet. I'll follow it. Then give the tablet a tap." />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="26" Margin="0,10,0,0">
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Border x:Name="HoverCheck" Classes="check">
+              <Path Data="M5,11 L9,15 L17,7" Stroke="{StaticResource Lv.Ink}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" Stretch="None" />
+            </Border>
+            <TextBlock Classes="body" Text="Hover" VerticalAlignment="Center" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Border x:Name="TapCheck" Classes="check">
+              <Path Data="M5,11 L9,15 L17,7" Stroke="{StaticResource Lv.Ink}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" Stretch="None" />
+            </Border>
+            <TextBlock Classes="body" Text="Tap" VerticalAlignment="Center" />
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Border x:Name="PressCheck" Classes="check">
+              <Path Data="M5,11 L9,15 L17,7" Stroke="{StaticResource Lv.Ink}" StrokeThickness="2.2" StrokeLineCap="Round" StrokeJoin="Round" Stretch="None" />
+            </Border>
+            <TextBlock Classes="body" Text="Press hard" VerticalAlignment="Center" />
+          </StackPanel>
+        </StackPanel>
+        <!-- Live pressure, so the press feels physical -->
+        <Panel Width="260" Height="6" HorizontalAlignment="Center" Margin="0,8,0,0">
+          <Border Background="{DynamicResource Lv.Line}" CornerRadius="3" />
+          <Border x:Name="PenBar" Background="{StaticResource Lv.Ember}" CornerRadius="3" HorizontalAlignment="Left" Width="0">
+            <Border.Transitions>
+              <Transitions><DoubleTransition Property="Width" Duration="0:0:0.08" /></Transitions>
+            </Border.Transitions>
+          </Border>
+        </Panel>
+      </StackPanel>
+
+      <!-- 3 · Pick a screen -->
+      <StackPanel x:Name="StepScreen" Classes="step" Spacing="12" Width="620" IsVisible="False">
+        <TextBlock Classes="h1" FontSize="30" Text="Where do you draw?" HorizontalAlignment="Center" />
+        <TextBlock Classes="body muted" TextAlignment="Center"
+                   Text="Pick the screen your pen should draw on. You can push the pen against an edge to hop screens later." />
+        <Border Classes="card" Padding="10" Margin="0,8,0,0">
+          <c:ScreenMap x:Name="Screens" Height="260" />
+        </Border>
+        <TextBlock x:Name="ScreenPicked" Classes="mono muted" FontSize="12" HorizontalAlignment="Center" />
+      </StackPanel>
+
+      <!-- 4 · Feel -->
+      <StackPanel x:Name="StepFeel" Classes="step" Spacing="12" Width="620" IsVisible="False">
+        <TextBlock Classes="h1" FontSize="30" Text="How should it feel?" HorizontalAlignment="Center" />
+        <TextBlock Classes="body muted" TextAlignment="Center" Text="Pick one, then scribble below to try it." />
+        <StackPanel x:Name="FeelChoices" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center" Margin="0,8,0,0" />
+        <Border Classes="card" Padding="6" Margin="0,6,0,0">
+          <c:TestPad x:Name="Pad" Height="170" />
+        </Border>
+      </StackPanel>
+
+      <!-- 5 · Done -->
+      <StackPanel x:Name="StepDone" Classes="step" Spacing="12" Width="520" IsVisible="False">
+        <c:LvenoDot x:Name="DoneDot" Width="120" Height="120" HorizontalAlignment="Center" Margin="0,0,0,8" Expression="Wink" />
+        <TextBlock Classes="display" FontSize="40" LetterSpacing="-2.2" Text="You're all set." HorizontalAlignment="Center" />
+        <TextBlock Classes="body muted" TextAlignment="Center" Text="Two extras you might like. You can change them any time." />
+        <Border Classes="card" Padding="0" Margin="0,10,0,0">
+          <StackPanel>
+            <Grid ColumnDefinitions="*,Auto" Margin="18,14">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Push to switch screens" />
+                <TextBlock Classes="body muted" FontSize="13" Text="Rest the pen on an edge for a second to hop over." />
+              </StackPanel>
+              <ToggleSwitch x:Name="EdgePushSwitch" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
+            </Grid>
+            <Border Classes="divider" />
+            <Grid ColumnDefinitions="*,Auto" Margin="18,14">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Pen scrolling" />
+                <TextBlock Classes="body muted" FontSize="13" Text="Drag pages like a phone. Off in drawing apps." />
+              </StackPanel>
+              <ToggleSwitch x:Name="ScrollSwitch" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
+            </Grid>
+          </StackPanel>
+        </Border>
+        <TextBlock Classes="body muted" FontSize="12" TextAlignment="Center" Margin="0,4,0,0"
+                   Text="InkDot lives in the menu bar. Close this window and your pen keeps working." />
+      </StackPanel>
+    </Panel>
+
+    <!-- Navigation -->
+    <Grid Grid.Row="2" ColumnDefinitions="*,Auto,10,Auto">
+      <TextBlock x:Name="StepCounter" Classes="label" VerticalAlignment="Center" />
+      <Button x:Name="BackButton" Grid.Column="1" Classes="ghost" Content="Back" />
+      <Button x:Name="NextButton" Grid.Column="3" Classes="primary" Content="Let's go" MinWidth="130"
+              HorizontalContentAlignment="Center" />
+    </Grid>
+  </Grid>
+</UserControl>

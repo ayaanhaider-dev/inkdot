@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>Lveno</AssemblyName>
+    <RootNamespace>Lveno.App</RootNamespace>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- OpenTabletDriver's async conventions; same suppressions it uses itself. -->
+    <NoWarn>$(NoWarn);VSTHRD100;VSTHRD101;VSTHRD110;VSTHRD200</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.23" />
+    <!-- Live XAML reload while developing (Debug builds only). -->
+    <PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.3.23" PrivateAssets="All" Publish="True" />
+    <PackageReference Include="HotAvalonia" Version="3.1.5" PrivateAssets="All" Publish="True" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\OpenTabletDriver\OpenTabletDriver.Desktop\OpenTabletDriver.Desktop.csproj" />
+    <ProjectReference Include="..\Lveno.Plugins\Lveno.Plugins.csproj" />
+  </ItemGroup>
+
+</Project>

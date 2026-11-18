@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lveno's OpenTabletDriver plugin. The daemon loads Lveno.Plugins.dll from its Plugins/Lveno folder.
+    OpenTabletDriver.Plugin is provided by the daemon at runtime, so it must not be copied next to this dll.
+  -->
+  <PropertyGroup>
+    <AssemblyName>Lveno.Plugins</AssemblyName>
+    <RootNamespace>Lveno.Plugins</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\external\OpenTabletDriver\OpenTabletDriver.Plugin\OpenTabletDriver.Plugin.csproj">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

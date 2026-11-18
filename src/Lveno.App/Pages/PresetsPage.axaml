@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Lveno.App.Pages.PresetsPage">
+  <StackPanel Spacing="28">
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="label" Text="PRESETS" />
+      <TextBlock Classes="h1" Text="Switch setups in one click." />
+      <TextBlock Classes="body muted" MaxWidth="540" HorizontalAlignment="Left"
+                 Text="Quick presets change how the pen feels. Your presets bring back everything. Both are in the menu bar too." />
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <TextBlock Classes="label" Text="QUICK" />
+      <UniformGrid x:Name="QuickGrid" Columns="2" />
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <TextBlock Classes="label" Text="YOURS" />
+      <Border Classes="card" Padding="0">
+        <StackPanel>
+          <StackPanel x:Name="SavedRows" />
+
+          <StackPanel x:Name="NoSaved" Spacing="4" Margin="20,18">
+            <TextBlock Classes="h2" Text="Nothing saved yet." />
+            <TextBlock Classes="body muted" FontSize="13"
+                       Text="Set things up the way you like, give it a name below, and save." />
+          </StackPanel>
+
+          <Border Classes="divider" />
+          <Grid ColumnDefinitions="*,Auto" Margin="16,14">
+            <TextBox x:Name="NameBox" Classes="field" Watermark="Name this setup, e.g. Photoshop inking" />
+            <Button x:Name="SaveButton" Grid.Column="1" Classes="primary" Content="Save current" Margin="10,0,0,0" />
+          </Grid>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

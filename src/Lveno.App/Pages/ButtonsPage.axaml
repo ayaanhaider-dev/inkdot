@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="using:Lveno.App.Controls"
+             x:Class="Lveno.App.Pages.ButtonsPage">
+  <StackPanel Spacing="20">
+
+    <StackPanel Spacing="4">
+      <TextBlock Classes="label" Text="PEN BUTTONS" />
+      <TextBlock Classes="h1" Text="Make the buttons yours." />
+    </StackPanel>
+
+    <!-- All apps, then one tab per app with its own buttons, then + -->
+    <WrapPanel x:Name="AppTabs" />
+
+    <Border Classes="card" Padding="0" ClipToBounds="True">
+      <Grid ColumnDefinitions="240,*">
+        <Border Background="{DynamicResource Lv.Bg}" BorderBrush="{DynamicResource Lv.Line}" BorderThickness="0,0,1,0"
+                CornerRadius="14,0,0,14">
+          <c:PenDrawing x:Name="Pen" Height="360" Margin="20,26" />
+        </Border>
+
+        <StackPanel Grid.Column="1" Margin="32,28" Spacing="24">
+          <StackPanel Spacing="4">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <Border x:Name="ScopeIconBox" Width="26" Height="26" CornerRadius="6" ClipToBounds="True" IsVisible="False">
+                <Image x:Name="ScopeIcon" />
+              </Border>
+              <TextBlock x:Name="ScopeTitle" Classes="h2" FontSize="18" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock x:Name="ScopeHint" Classes="body muted" FontSize="13" />
+          </StackPanel>
+
+          <!-- Pen scrolling: drag to scroll, tap to click, hold then drag to select -->
+          <Border Background="{DynamicResource Lv.Bg}" BorderBrush="{DynamicResource Lv.Line}" BorderThickness="1"
+                  CornerRadius="12" Padding="16,12">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Spacing="3">
+                <TextBlock x:Name="ScrollTitle" Classes="h2" Text="Pen scrolling" />
+                <TextBlock x:Name="ScrollHint" Classes="body muted" FontSize="12" LineHeight="17" TextWrapping="Wrap" />
+              </StackPanel>
+              <ToggleSwitch x:Name="ScrollToggle" Grid.Column="1" OnContent="" OffContent=""
+                            VerticalAlignment="Center" Margin="12,0,0,0" />
+            </Grid>
+          </Border>
+
+          <StackPanel x:Name="Rows" Spacing="20" />
+
+          <TextBlock x:Name="NoButtons" Classes="body muted" IsVisible="False" Text="This pen has no buttons." />
+
+          <Button x:Name="RemoveAppButton" Classes="link" FontSize="13" IsVisible="False" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+      <Button x:Name="RevertButton" Classes="ghost" Content="Undo changes" />
+      <Button x:Name="ApplyButton" Classes="primary" Content="Apply" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

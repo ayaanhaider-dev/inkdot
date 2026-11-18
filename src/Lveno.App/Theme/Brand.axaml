@@ -1,0 +1,45 @@
+<!--
+  Lveno brand tokens (brand guidelines v1.0, October 2026).
+  Paper 60 · Ink 30 · Stone 7 · Ember 3. Ember is for the dot and one key action per screen.
+  Change the brand here: every screen reads these keys.
+-->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="Lv.Bg" Color="#F4F4F1" />          <!-- Paper -->
+      <SolidColorBrush x:Key="Lv.Plate" Color="#FBFBF9" />
+      <SolidColorBrush x:Key="Lv.Fg" Color="#121212" />          <!-- Ink -->
+      <SolidColorBrush x:Key="Lv.Muted" Color="#6C6C66" />       <!-- Graphite -->
+      <SolidColorBrush x:Key="Lv.Line" Color="#DADAD4" />        <!-- Stone -->
+      <SolidColorBrush x:Key="Lv.Hover" Color="#EAEAE5" />
+      <SolidColorBrush x:Key="Lv.AccentText" Color="#C2410C" />  <!-- Ember Deep: small accent text on paper -->
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="Lv.Bg" Color="#121212" />          <!-- Ink -->
+      <SolidColorBrush x:Key="Lv.Plate" Color="#1A1A19" />
+      <SolidColorBrush x:Key="Lv.Fg" Color="#F4F4F1" />          <!-- Paper -->
+      <SolidColorBrush x:Key="Lv.Muted" Color="#9C9C95" />
+      <SolidColorBrush x:Key="Lv.Line" Color="#2B2B29" />
+      <SolidColorBrush x:Key="Lv.Hover" Color="#222221" />
+      <SolidColorBrush x:Key="Lv.AccentText" Color="#F2551D" />
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- Fixed brand colours (same in light and dark) -->
+  <Color x:Key="Lv.EmberColor">#F2551D</Color>
+  <SolidColorBrush x:Key="Lv.Ember" Color="#F2551D" />
+  <SolidColorBrush x:Key="Lv.EmberHover" Color="#FF6634" />
+  <SolidColorBrush x:Key="Lv.EmberPressed" Color="#D9481A" />
+  <SolidColorBrush x:Key="Lv.Ink" Color="#121212" />
+  <SolidColorBrush x:Key="Lv.Paper" Color="#F4F4F1" />
+
+  <!-- One family, set tight: Geist for everything, Geist Mono for labels and numbers. -->
+  <FontFamily x:Key="Lv.Font">avares://Lveno/Assets/Fonts#Geist</FontFamily>
+  <FontFamily x:Key="Lv.Mono">avares://Lveno/Assets/Fonts#Geist Mono</FontFamily>
+  <FontFamily x:Key="ContentControlThemeFontFamily">avares://Lveno/Assets/Fonts#Geist</FontFamily>
+
+  <CornerRadius x:Key="Lv.CardRadius">14</CornerRadius>
+  <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+</ResourceDictionary>

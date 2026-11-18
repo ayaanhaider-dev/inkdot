@@ -1,0 +1,152 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:Lveno.App.Controls"
+        xmlns:p="using:Lveno.App.Pages"
+        x:Class="Lveno.App.MainWindow"
+        Title="InkDot by Lveno"
+        Icon="avares://Lveno/Assets/lveno-icon.png"
+        Width="1080" Height="740" MinWidth="960" MinHeight="660"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Lv.Bg}"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="40">
+
+  <Panel>
+    <Grid ColumnDefinitions="236,*">
+
+      <!-- Sidebar -->
+      <Border BorderBrush="{DynamicResource Lv.Line}" BorderThickness="0,0,1,0">
+        <DockPanel Margin="18,54,16,20">
+          <StackPanel DockPanel.Dock="Top" Margin="12,0,0,30" Spacing="6">
+            <c:Wordmark x:Name="Logo" Height="30" HorizontalAlignment="Left" Foreground="{DynamicResource Lv.Fg}" />
+            <TextBlock Classes="label" Text="INKDOT" Margin="1,0,0,0" />
+          </StackPanel>
+
+          <StackPanel DockPanel.Dock="Bottom" Spacing="14">
+            <Border x:Name="XpPenWarning" Classes="card" Padding="14" IsVisible="False">
+              <StackPanel Spacing="10">
+                <TextBlock Classes="body" FontSize="13" LineHeight="19"
+                           Text="XP-Pen's driver is running too. Quit it so only Lveno moves the cursor." />
+                <Button x:Name="QuitXpPenButton" Classes="ghost" Content="Quit XP-Pen driver" FontSize="12" />
+              </StackPanel>
+            </Border>
+            <StackPanel Spacing="3" Margin="12,0">
+              <TextBlock Classes="label" Text="TABLET" />
+              <TextBlock x:Name="SideTablet" Classes="body" FontWeight="Bold" TextWrapping="Wrap" />
+              <StackPanel Orientation="Horizontal" Spacing="7">
+                <Ellipse x:Name="StatusLight" Width="7" Height="7" Fill="{DynamicResource Lv.Muted}" VerticalAlignment="Center" />
+                <TextBlock x:Name="SideStatus" Classes="body muted" FontSize="13" />
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+
+          <StackPanel Spacing="2">
+            <Button x:Name="NavArea" Classes="nav active">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path Classes="icon" Data="{StaticResource Icon.Area}" />
+                <TextBlock Text="Drawing area" />
+              </StackPanel>
+            </Button>
+            <Button x:Name="NavPressure" Classes="nav">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path Classes="icon" Data="{StaticResource Icon.Pressure}" />
+                <TextBlock Text="Pressure" />
+              </StackPanel>
+            </Button>
+            <Button x:Name="NavButtons" Classes="nav">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path Classes="icon" Data="{StaticResource Icon.Buttons}" />
+                <TextBlock Text="Pen buttons" />
+              </StackPanel>
+            </Button>
+            <Button x:Name="NavPresets" Classes="nav">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path Classes="icon" Data="{StaticResource Icon.Presets}" />
+                <TextBlock Text="Presets" />
+              </StackPanel>
+            </Button>
+            <Button x:Name="NavAbout" Classes="nav">
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <Path Classes="icon" Data="{StaticResource Icon.About}" />
+                <TextBlock Text="About" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <ScrollViewer x:Name="Scroller" Grid.Column="1">
+        <Panel Margin="40,54,40,36" MaxWidth="1000" HorizontalAlignment="Stretch">
+          <p:AreaPage x:Name="AreaPageView" />
+          <p:ButtonsPage x:Name="ButtonsPageView" IsVisible="False" />
+          <p:PresetsPage x:Name="PresetsPageView" IsVisible="False" />
+          <p:AboutPage x:Name="AboutPageView" IsVisible="False" />
+        </Panel>
+      </ScrollViewer>
+
+      <p:PressurePage x:Name="PressurePageView" Grid.Column="1" IsVisible="False" Margin="40,54,40,28" />
+
+      <Border x:Name="Toast" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+              Margin="0,0,0,28" Background="{DynamicResource Lv.Fg}" CornerRadius="999" Padding="18,9"
+              Opacity="0" IsHitTestVisible="False">
+        <Border.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.18" />
+          </Transitions>
+        </Border.Transitions>
+        <TextBlock x:Name="ToastText" Foreground="{DynamicResource Lv.Bg}" FontSize="13" FontWeight="Bold" />
+      </Border>
+    </Grid>
+
+    <!-- Full-window states: starting, permissions, no tablet, errors. The big dot is the only dot in view. -->
+    <Grid x:Name="StateView" Background="{DynamicResource Lv.Bg}" IsVisible="False">
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10" Width="480">
+        <c:LvenoDot x:Name="StateDot" Width="116" Height="116" HorizontalAlignment="Center" Margin="0,0,0,10" />
+        <TextBlock x:Name="StateTitle" Classes="display" TextAlignment="Center" TextWrapping="Wrap" />
+        <TextBlock x:Name="StateBody" Classes="body muted" TextAlignment="Center" />
+
+        <StackPanel x:Name="PermissionList" Spacing="10" Margin="0,16,0,0" IsVisible="False">
+          <Border Classes="card" Padding="18,14">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Input Monitoring" />
+                <TextBlock Classes="body muted" FontSize="13" Text="So Lveno can read your pen." />
+              </StackPanel>
+              <TextBlock x:Name="InputMonitoringOk" Grid.Column="1" Classes="label accent" Text="ALLOWED"
+                         VerticalAlignment="Center" />
+              <Button x:Name="InputMonitoringButton" Grid.Column="1" Classes="ghost" Content="Allow"
+                      VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+          <Border Classes="card" Padding="18,14">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Spacing="2">
+                <TextBlock Classes="h2" Text="Accessibility" />
+                <TextBlock Classes="body muted" FontSize="13" Text="So Lveno can move your cursor." />
+              </StackPanel>
+              <TextBlock x:Name="AccessibilityOk" Grid.Column="1" Classes="label accent" Text="ALLOWED"
+                         VerticalAlignment="Center" />
+              <Button x:Name="AccessibilityButton" Grid.Column="1" Classes="ghost" Content="Allow"
+                      VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </StackPanel>
+
+        <TextBlock x:Name="StateDetail" Classes="mono muted" TextAlignment="Center" TextWrapping="Wrap"
+                   IsVisible="False" Margin="0,6,0,0" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" Margin="0,16,0,0">
+          <Button x:Name="StateSecondary" Classes="ghost" IsVisible="False" />
+          <Button x:Name="StatePrimary" Classes="primary" IsVisible="False" />
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+
+    <!-- First-run welcome, above everything else. -->
+    <p:OnboardingView x:Name="Onboarding" IsVisible="False" />
+
+    <!-- Title bar strip: lets you drag the window by its top edge. -->
+    <Border x:Name="DragStrip" Height="40" VerticalAlignment="Top" Background="Transparent" />
+  </Panel>
+</Window>

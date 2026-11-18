@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="using:Lveno.App.Controls"
+             x:Class="Lveno.App.Pages.AreaPage">
+  <StackPanel Spacing="20">
+
+    <StackPanel Spacing="4">
+      <TextBlock Classes="label" Text="DRAWING AREA" />
+      <TextBlock Classes="h1" Text="Pick a screen." />
+      <Border x:Name="MouseModeNote" Classes="card" Padding="14,10" Margin="0,10,0,0" IsVisible="False">
+        <TextBlock Classes="body accent" FontSize="13"
+                   Text="Mouse mode is on, so these settings wait until you turn it off." />
+      </Border>
+    </StackPanel>
+
+    <Grid RowDefinitions="Auto,16,Auto">
+
+      <!-- Where the pen draws -->
+      <Border Classes="card" Padding="0">
+        <Grid RowDefinitions="Auto,*,Auto,Auto">
+          <TextBlock Classes="label" Text="SCREEN" Margin="20,18,20,0" />
+          <c:ScreenMap x:Name="Screens" Grid.Row="1" Height="300" Margin="12,8" />
+          <Border Grid.Row="2" BorderBrush="{DynamicResource Lv.Line}" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto" Margin="20,14">
+              <StackPanel VerticalAlignment="Center" Spacing="2">
+                <TextBlock x:Name="ScreenTitle" Classes="h2" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="ScreenDetail" Classes="mono muted" FontSize="11" TextTrimming="CharacterEllipsis" />
+              </StackPanel>
+              <Button x:Name="AllScreensButton" Grid.Column="1" Classes="ghost" Content="All screens" Margin="12,0,0,0" />
+            </Grid>
+          </Border>
+          <Border Grid.Row="3" BorderBrush="{DynamicResource Lv.Line}" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto" Margin="20,12">
+              <StackPanel Spacing="1">
+                <TextBlock Classes="h2" FontSize="14" Text="Push to switch screens" />
+                <TextBlock Classes="body muted" FontSize="12" TextWrapping="Wrap"
+                           Text="Hover the pen against an edge that faces another screen for a second." />
+              </StackPanel>
+              <ToggleSwitch x:Name="EdgePushToggle" Grid.Column="1" OnContent="" OffContent=""
+                            VerticalAlignment="Center" Margin="12,0,0,0" />
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Which part of the tablet -->
+      <Border Grid.Row="2" Classes="card" Padding="0">
+        <Grid ColumnDefinitions="320,*" RowDefinitions="Auto,*">
+          <TextBlock Classes="label" Text="TABLET" Margin="20,18,20,0" />
+          <c:TabletPreview x:Name="Preview" Grid.Row="1" Height="170" Margin="20,12,20,18" />
+
+          <StackPanel Grid.Column="1" Grid.RowSpan="2" Spacing="0" VerticalAlignment="Center">
+            <Grid ColumnDefinitions="*,Auto" Margin="20,12">
+              <StackPanel Spacing="1">
+                <TextBlock Classes="h2" FontSize="14" Text="Match screen shape" />
+                <TextBlock Classes="body muted" FontSize="12" Text="Keeps circles round." />
+              </StackPanel>
+              <ToggleSwitch x:Name="MatchShape" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
+            </Grid>
+            <Border Classes="divider" />
+            <Grid ColumnDefinitions="*,Auto" Margin="20,12">
+              <StackPanel Spacing="1">
+                <TextBlock Classes="h2" FontSize="14" Text="Left-handed" />
+                <TextBlock Classes="body muted" FontSize="12" Text="Cable on the left." />
+              </StackPanel>
+              <ToggleSwitch x:Name="LeftHanded" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
+            </Grid>
+            <Border Classes="divider" />
+            <StackPanel Spacing="0" Margin="20,12,20,10">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Classes="h2" FontSize="14" Text="Area size" />
+                <TextBlock x:Name="SizeValue" Grid.Column="1" Classes="mono" VerticalAlignment="Center" />
+              </Grid>
+              <Slider x:Name="SizeSlider" Minimum="30" Maximum="100" Value="100" TickFrequency="5" IsSnapToTickEnabled="True" />
+            </StackPanel>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+      <Button x:Name="RevertButton" Classes="ghost" Content="Undo changes" />
+      <Button x:Name="ApplyButton" Classes="primary" Content="Apply" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>
