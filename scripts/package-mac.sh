@@ -7,7 +7,7 @@ export PATH="$HOME/.dotnet:$PATH" DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 RID="${RID:-osx-arm64}"
 APP="dist/InkDot.app"
 OUT="$APP/Contents/MacOS"
-VERSION="0.1.0"
+VERSION="0.2.0"
 
 rm -rf "$APP"
 mkdir -p "$OUT" "$APP/Contents/Resources"

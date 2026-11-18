@@ -64,8 +64,14 @@ public sealed class TabletSession
     public bool MouseMode
     {
         get => Profile.OutputMode.Path == typeof(RelativeMode).FullName;
-        set => Profile.OutputMode = new PluginSettingStore(value ? typeof(RelativeMode) : typeof(AbsoluteMode));
+        set => Profile.OutputMode = new PluginSettingStore(value ? typeof(RelativeMode) : DrawingMode);
     }
+
+    /// <summary>
+    /// The drawing (absolute) mode: on Windows the pen is a real Windows Ink pen with pressure;
+    /// on macOS the driver's absolute mode already sends pressure.
+    /// </summary>
+    public static Type DrawingMode => OperatingSystem.IsWindows() ? typeof(WindowsInkMode) : typeof(AbsoluteMode);
 
     public RelativeModeSettings Relative
     {
@@ -138,9 +144,9 @@ public sealed class TabletSession
     /// <summary>Sends the settings to the driver and saves them so they survive a restart.</summary>
     public async Task ApplyAsync()
     {
-        // Only two modes are offered: absolute (drawing) or relative (mouse mode).
-        if (!MouseMode && Profile.OutputMode.Path != typeof(AbsoluteMode).FullName)
-            Profile.OutputMode = new PluginSettingStore(typeof(AbsoluteMode));
+        // Only two modes are offered: drawing (absolute) or mouse mode (relative).
+        if (!MouseMode && Profile.OutputMode.Path != DrawingMode.FullName)
+            Profile.OutputMode = new PluginSettingStore(DrawingMode);
 
         EnsureScreenFix();
         DropUnknownFilters();

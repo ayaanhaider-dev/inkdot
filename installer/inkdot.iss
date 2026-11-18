@@ -4,7 +4,7 @@
 ; Installs per user (no admin prompt), adds a Start menu entry and an optional start-at-login.
 
 #define AppName "InkDot"
-#define AppVersion "0.1.0"
+#define AppVersion "0.2.0"
 #define AppPublisher "Lveno"
 #define AppURL "https://lveno.agency/inkdot"
 #define SourceDir "..\dist\InkDot-win-x64"

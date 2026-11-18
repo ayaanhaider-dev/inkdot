@@ -51,7 +51,9 @@ Quit XP-Pen's own driver (PenTablet) first: two drivers can't read the tablet at
 2. Open **InkDot.exe** in the extracted folder. Windows SmartScreen may say "Windows protected your PC", because InkDot isn't code-signed. Click **More info → Run anyway**.
 3. Quit XP-Pen's own driver first, from the tray or Task Manager.
 
-**Requirements:** Windows 10 or 11, 64-bit. Pressure in drawing apps (Windows Ink) isn't in this version yet: the pen moves and clicks, but apps don't see pressure.
+**Requirements:** Windows 10 (1809 or later) or 11, 64-bit.
+
+**Pressure:** InkDot shows up in Windows as a real pen (Windows Ink), with pressure, tilt, the eraser and the barrel button. No extra driver is needed. Apps that use Windows Ink get it: Photoshop as it comes, Krita with **Windows 8+ Pointer Input**, and Clip Studio with **TabletPC**. Apps that only support Wintab don't get pressure.
 
 ## Build from source
 
