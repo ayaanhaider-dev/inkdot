@@ -6,7 +6,7 @@
 <p align="center"><b>A calmer, smarter pen tablet driver for macOS.</b><br>By Lveno.</p>
 
 <p align="center">
-  <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4"><img src="docs/launch.gif" width="640" alt="InkDot launch video"></a><br>
+  <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4"><img src="docs/launch.gif" width="560" alt="InkDot launch video"></a><br>
   <sub>▶ <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4">Watch with sound</a> (33 s)</sub>
 </p>
 
