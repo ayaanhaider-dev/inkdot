@@ -16,8 +16,10 @@ public sealed class DriverService
     /// <summary>The daemon's pipe and single-instance name. Fixed by OpenTabletDriver.</summary>
     public const string DaemonName = "OpenTabletDriver.Daemon";
 
-    private static readonly string Support = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support");
+    /// <summary>~/Library/Application Support on macOS, %APPDATA% on Windows.</summary>
+    private static readonly string Support = OperatingSystem.IsMacOS()
+        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support")
+        : Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
     /// <summary>InkDot keeps its own settings and plugins, apart from a stock OpenTabletDriver install.</summary>
     public static string AppDataDirectory { get; } = MoveOldFolder(Path.Combine(Support, "InkDot"));
@@ -69,7 +71,7 @@ public sealed class DriverService
         bool pluginChanged = !devMode && InstallPlugin();
         if (!running)
         {
-            if (devMode)
+            if (devMode && OperatingSystem.IsMacOS()) // Windows has no permissions to borrow
                 await StartThroughInstalledAppAsync(ct);
             else
                 StartDaemon();
@@ -150,6 +152,7 @@ public sealed class DriverService
         start.ArgumentList.Add("--appdata");
         start.ArgumentList.Add(AppDataDirectory);
         start.UseShellExecute = false;
+        start.CreateNoWindow = true; // the driver is a console program; on Windows this hides its console window
         start.WorkingDirectory = Path.GetDirectoryName(start.FileName == "dotnet" ? start.ArgumentList[0] : start.FileName)!;
 
         Directory.CreateDirectory(AppDataDirectory);
@@ -166,11 +169,13 @@ public sealed class DriverService
         if (Environment.GetEnvironmentVariable("LVENO_DAEMON") is { Length: > 0 } custom)
             candidates.Add(custom);
 
+        candidates.Add(Path.Combine(AppContext.BaseDirectory, DaemonName + ".exe"));
         candidates.Add(Path.Combine(AppContext.BaseDirectory, DaemonName));
         candidates.Add(Path.Combine(AppContext.BaseDirectory, DaemonName + ".dll"));
 
         // src/Lveno.App/bin/<config>/net10.0/ → repo root → build/daemon
         var repo = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
+        candidates.Add(Path.Combine(repo, "build", "daemon", DaemonName + ".exe"));
         candidates.Add(Path.Combine(repo, "build", "daemon", DaemonName));
         candidates.Add(Path.Combine(repo, "build", "daemon", DaemonName + ".dll"));
 
@@ -189,9 +194,10 @@ public sealed class DriverService
 
     private static string DotnetHost()
     {
-        if (Environment.GetEnvironmentVariable("DOTNET_ROOT") is { Length: > 0 } root && File.Exists(Path.Combine(root, "dotnet")))
-            return Path.Combine(root, "dotnet");
-        var home = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "dotnet");
-        return File.Exists(home) ? home : "dotnet";
+        string exe = OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet";
+        if (Environment.GetEnvironmentVariable("DOTNET_ROOT") is { Length: > 0 } root && File.Exists(Path.Combine(root, exe)))
+            return Path.Combine(root, exe);
+        var home = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", exe);
+        return File.Exists(home) ? home : exe;
     }
 }

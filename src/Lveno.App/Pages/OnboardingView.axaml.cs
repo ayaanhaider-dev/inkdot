@@ -269,7 +269,7 @@ public partial class OnboardingView : UserControl
         if (_window?.Session is not { } s) return;
         Screens.Displays = s.Displays;
         Screens.Names = s.ScreenNames;
-        Screens.Wallpapers = MacApps.Wallpapers();
+        Screens.Wallpapers = Apps.Wallpapers();
         Screens.CursorIndex = ScreenLayout.CursorScreen(s.Displays);
         Screens.SelectedIndex = s.CurrentScreenIndex();
         UpdateScreenText();

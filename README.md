@@ -3,14 +3,14 @@
 </p>
 
 <h1 align="center">InkDot</h1>
-<p align="center"><b>A calmer, smarter pen tablet driver for macOS.</b><br>By Lveno.</p>
+<p align="center"><b>A calmer, smarter pen tablet driver for macOS and Windows.</b><br>By Lveno.</p>
 
 <p align="center">
   <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4"><img src="docs/launch.gif" width="560" alt="InkDot launch video"></a><br>
   <sub>▶ <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4">Watch with sound</a> (33 s)</sub>
 </p>
 
-InkDot replaces the stock XP-Pen driver with a fast, clean app that lives in your menu bar.
+InkDot replaces the stock XP-Pen driver with a fast, clean app that lives in your menu bar (or the Windows tray).
 It runs on [OpenTabletDriver](https://github.com/OpenTabletDriver/OpenTabletDriver) underneath,
 so it supports the same wide range of tablets, with Lveno's own features and UI on top.
 
@@ -28,6 +28,8 @@ so it supports the same wide range of tablets, with Lveno's own features and UI 
 
 ## Install
 
+### macOS
+
 1. Download `InkDot-<version>.dmg` from [Releases](../../releases) and drag **InkDot** into **Applications**.
 2. Open InkDot. macOS warns that it can't verify the developer, because InkDot isn't notarized. Click **Done**.
 3. Open **System Settings → Privacy & Security**, scroll down and click **Open Anyway** next to InkDot.
@@ -43,6 +45,14 @@ Quit XP-Pen's own driver (PenTablet) first: two drivers can't read the tablet at
 
 **Requirements:** macOS 12 or later, Apple Silicon. Tested with XP-Pen tablets; any tablet OpenTabletDriver supports should work.
 
+### Windows
+
+1. Download `InkDot-<version>-win-x64.zip` from [Releases](../../releases), right-click it and choose **Extract All**.
+2. Open **InkDot.exe** in the extracted folder. Windows SmartScreen may say "Windows protected your PC", because InkDot isn't code-signed. Click **More info → Run anyway**.
+3. Quit XP-Pen's own driver first, from the tray or Task Manager.
+
+**Requirements:** Windows 10 or 11, 64-bit. Pressure in drawing apps (Windows Ink) isn't in this version yet: the pen moves and clicks, but apps don't see pressure.
+
 ## Build from source
 
 You need the [.NET 10 SDK](https://dotnet.microsoft.com/download). For the installer, also `rsvg-convert` (`brew install librsvg`).
@@ -51,6 +61,14 @@ You need the [.NET 10 SDK](https://dotnet.microsoft.com/download). For the insta
 ./scripts/package-mac.sh   # dist/InkDot.app: app, driver and plugin, .NET runtime included
 ./scripts/make-dmg.sh      # dist/InkDot-<version>.dmg: builds the app, then the installer
 ```
+
+For Windows, build on any OS:
+
+```bash
+./scripts/package-win.sh   # dist/InkDot-<version>-win-x64.zip
+```
+
+Then open `installer/inkdot.iss` in [Inno Setup](https://jrsoftware.org/isinfo.php) on Windows to make a setup .exe.
 
 Set `LVENO_SIGN_IDENTITY` to a code-signing certificate name to sign with it. Otherwise the app is signed
 ad-hoc, and macOS asks for the permissions again after every rebuild.
@@ -72,7 +90,9 @@ copy only talks to it, so you can change the UI without granting permissions aga
 | `src/Lveno.App` | The Avalonia app: window, pages, menu bar, overlays and onboarding. It controls the driver over OpenTabletDriver's RPC pipe. |
 | `src/Lveno.Plugins` | Driver plugins: pressure curve, screen switching, push to switch, pen scrolling and a fix for macOS screen layout changes. |
 | `external/OpenTabletDriver` | OpenTabletDriver 0.6.8.1, the driver itself. |
-| `scripts` | Dev mode, app packaging and the DMG installer (`scripts/dmg`). |
+| `src/*/Platform` | The macOS and Windows parts: screens, scrolling, apps and icons, overlays. |
+| `scripts` | Dev mode, app packaging, the DMG installer (`scripts/dmg`) and the Windows package. |
+| `installer` | The Windows installer (Inno Setup). |
 
 Settings live in `~/Library/Application Support/InkDot`.
 

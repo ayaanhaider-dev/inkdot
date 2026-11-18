@@ -437,7 +437,7 @@ public partial class MainWindow : Window, IShell
         if (Config.AppRules.Count == 0 && !Config.PenScroll && _appKey == "")
             return; // nothing per-app to do, and the normal settings are already on
 
-        var front = MacApps.Frontmost();
+        var front = Apps.Frontmost();
         if (front is null)
             return;
         // InkDot itself counts as a drawing app: its test pads need the pen to draw, not scroll.

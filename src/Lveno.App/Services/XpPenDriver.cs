@@ -7,7 +7,8 @@ namespace Lveno.App.Services;
 /// </summary>
 public static class XpPenDriver
 {
-    private static readonly string[] ProcessNames = ["XPPenDriver", "XPPenTablet", "PenTablet", "PenDriver"];
+    // macOS and Windows names of XP-Pen's driver and its tray/service helpers.
+    private static readonly string[] ProcessNames = ["XPPenDriver", "XPPenTablet", "PenTablet", "PenDriver", "PentabletService", "PenTabletService"];
 
     public static IReadOnlyList<Process> Running() =>
         Process.GetProcesses()

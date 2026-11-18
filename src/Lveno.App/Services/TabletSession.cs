@@ -33,7 +33,7 @@ public sealed class TabletSession
     public IReadOnlyList<ScreenInfo> Displays { get; }
 
     /// <summary>macOS's name for each screen, by display ID (e.g. "Built-in Retina Display").</summary>
-    public IReadOnlyDictionary<uint, string> ScreenNames { get; } = MacApps.ScreenNames();
+    public IReadOnlyDictionary<uint, string> ScreenNames { get; } = Apps.ScreenNames();
 
     /// <summary>"Screen 2 · DELL U2720Q" or just "Screen 2".</summary>
     public string ScreenName(int index) =>
@@ -120,6 +120,21 @@ public sealed class TabletSession
         return true;
     }
 
+    /// <summary>
+    /// Removes filters whose plugin no longer exists (a renamed or broken entry). The driver skips them
+    /// anyway, but logs a warning for each one on every change.
+    /// </summary>
+    private void DropUnknownFilters()
+    {
+        var known = AppInfo.PluginManager.PluginTypes.Select(t => t.FullName).ToHashSet();
+        if (known.Count == 0) return; // plugins not loaded yet: don't judge
+        foreach (var profile in Settings.Profiles)
+        {
+            foreach (var stale in profile.Filters.Where(f => f is null || (!known.Contains(f.Path) && !f.Path.StartsWith("OpenTabletDriver.", StringComparison.Ordinal))).ToList())
+                profile.Filters.Remove(stale);
+        }
+    }
+
     /// <summary>Sends the settings to the driver and saves them so they survive a restart.</summary>
     public async Task ApplyAsync()
     {
@@ -128,6 +143,7 @@ public sealed class TabletSession
             Profile.OutputMode = new PluginSettingStore(typeof(AbsoluteMode));
 
         EnsureScreenFix();
+        DropUnknownFilters();
         await Driver.Daemon.SetSettings(Settings);
         Settings.Serialize(new FileInfo(AppInfo.Current.SettingsFile));
     }

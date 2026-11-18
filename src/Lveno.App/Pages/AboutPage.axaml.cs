@@ -49,6 +49,5 @@ public partial class AboutPage : UserControl
         SettingsPath.Text = AppInfo.Current.SettingsFile;
     }
 
-    private static void Open(string target) =>
-        Process.Start(new ProcessStartInfo("open") { ArgumentList = { target }, UseShellExecute = false });
+    private static void Open(string target) => Services.Shell.Open(target);
 }

@@ -30,7 +30,8 @@ public sealed class OverlayWindow : Window
         Content = Canvas;
         Canvas.Idle += () =>
         {
-            Native.OrderOut(this);
+            if (OperatingSystem.IsWindows()) Win.Hide(this);
+            else Native.OrderOut(this);
             _onScreen = false;
         };
     }
@@ -38,6 +39,19 @@ public sealed class OverlayWindow : Window
     /// <summary>Cover this screen and come to the front, without taking focus.</summary>
     public void ShowOn(ScreenInfo screen, double mainScreenHeight)
     {
+        if (OperatingSystem.IsWindows())
+        {
+            // Windows: GlobalX/GlobalY/Width/Height are already virtual-desktop pixels.
+            var px = ((double)screen.GlobalX, (double)screen.GlobalY, (double)screen.Width, (double)screen.Height);
+            if (_onScreen && px == _frame) return;
+            if (!IsVisible) Show();
+            if (!_nativeReady) _nativeReady = Win.MakeOverlay(this);
+            Win.Place(this, (int)px.Item1, (int)px.Item2, (int)px.Item3, (int)px.Item4);
+            _frame = px;
+            _onScreen = true;
+            return;
+        }
+
         // Cocoa puts the origin at the main screen's bottom-left.
         var frame = ((double)screen.GlobalX, mainScreenHeight - (screen.GlobalY + screen.Height), (double)screen.Width, (double)screen.Height);
         if (_onScreen && frame == _frame) return; // already up; called many times a second while pushing
@@ -50,6 +64,44 @@ public sealed class OverlayWindow : Window
         Native.OrderFront(this);
         _frame = frame;
         _onScreen = true;
+    }
+
+    /// <summary>Windows: click-through, never activated, not in Alt+Tab, above everything.</summary>
+    private static class Win
+    {
+        private const int GwlExStyle = -20;
+        private const long Transparent = 0x20, Layered = 0x80000, ToolWindow = 0x80, NoActivate = 0x8000000, TopMost = 0x8;
+        private static readonly IntPtr HwndTopMost = new(-1);
+        private const uint NoActivateFlag = 0x0010, ShowWindowFlag = 0x0040;
+
+        private static IntPtr Hwnd(Window w) =>
+            OperatingSystem.IsWindows() && w.TryGetPlatformHandle() is { } h ? h.Handle : IntPtr.Zero;
+
+        public static bool MakeOverlay(Window w)
+        {
+            var hwnd = Hwnd(w);
+            if (hwnd == IntPtr.Zero) return false;
+            long style = GetWindowLongPtr(hwnd, GwlExStyle).ToInt64();
+            SetWindowLongPtr(hwnd, GwlExStyle, new IntPtr(style | Transparent | Layered | ToolWindow | NoActivate | TopMost));
+            return true;
+        }
+
+        public static void Place(Window w, int x, int y, int width, int height)
+        {
+            var hwnd = Hwnd(w);
+            if (hwnd != IntPtr.Zero) SetWindowPos(hwnd, HwndTopMost, x, y, width, height, NoActivateFlag | ShowWindowFlag);
+        }
+
+        public static void Hide(Window w)
+        {
+            var hwnd = Hwnd(w);
+            if (hwnd != IntPtr.Zero) ShowWindow(hwnd, 0); // SW_HIDE
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")] private static extern IntPtr GetWindowLongPtr(IntPtr hwnd, int index);
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")] private static extern IntPtr SetWindowLongPtr(IntPtr hwnd, int index, IntPtr value);
+        [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hwnd, IntPtr after, int x, int y, int cx, int cy, uint flags);
+        [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hwnd, int command);
     }
 
     /// <summary>The macOS window calls Avalonia doesn't offer: click-through, level, all Spaces.</summary>

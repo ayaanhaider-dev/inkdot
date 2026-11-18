@@ -1,13 +1,12 @@
 using System.Runtime.InteropServices;
 using Avalonia.Media.Imaging;
 
-namespace Lveno.App.Services;
+namespace Lveno.App.Platform;
 
-/// <summary>An app on this Mac: its name and where it lives.</summary>
-public sealed record MacApp(string Name, string? BundlePath);
+using Lveno.App.Services;
 
 /// <summary>Asks macOS (NSWorkspace) which app is in front, which apps are open, and what their icons look like.</summary>
-public static class MacApps
+internal static class MacApps
 {
     private const string ObjC = "/usr/lib/libobjc.A.dylib";
 
@@ -44,10 +43,10 @@ public static class MacApps
     }
 
     /// <summary>Open apps that have a window or Dock icon, sorted by name.</summary>
-    public static IReadOnlyList<MacApp> RunningApps()
+    public static IReadOnlyList<DesktopApp> RunningApps()
     {
         if (!OperatingSystem.IsMacOS()) return [];
-        var apps = new Dictionary<string, MacApp>(StringComparer.OrdinalIgnoreCase);
+        var apps = new Dictionary<string, DesktopApp>(StringComparer.OrdinalIgnoreCase);
         try
         {
             var list = Send(Workspace, Sel("runningApplications"));
@@ -57,7 +56,7 @@ public static class MacApps
                 var app = Send(list, Sel("objectAtIndex:"), i);
                 if (SendInt(app, Sel("activationPolicy")) != 0) continue; // 0 = a regular app
                 if (Name(app) is { } name && !name.StartsWith("Lveno", StringComparison.OrdinalIgnoreCase))
-                    apps.TryAdd(name, new MacApp(name, BundlePath(app)));
+                    apps.TryAdd(name, new DesktopApp(name, BundlePath(app)));
             }
         }
         catch
@@ -67,43 +66,8 @@ public static class MacApps
         return apps.Values.OrderBy(a => a.Name, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
-    /// <summary>Names only, for older callers.</summary>
-    public static IReadOnlyList<string> Running() => RunningApps().Select(a => a.Name).ToList();
-
-    private static readonly Dictionary<string, Bitmap?> IconCache = new();
-
-    /// <summary>The app's icon, small. Cached in memory and on disk. Null if there isn't one.</summary>
-    public static Bitmap? Icon(string? bundlePath, int size = 64)
-    {
-        if (string.IsNullOrEmpty(bundlePath) || !OperatingSystem.IsMacOS()) return null;
-        if (IconCache.TryGetValue(bundlePath, out var cached)) return cached;
-
-        Bitmap? bitmap = null;
-        try
-        {
-            var folder = Directory.CreateDirectory(Path.Combine(DriverService.AppDataDirectory, "IconCache")).FullName;
-            var file = Path.Combine(folder, Convert.ToHexString(System.Security.Cryptography.SHA1.HashData(
-                System.Text.Encoding.UTF8.GetBytes(bundlePath)))[..16] + ".png");
-
-            if (!File.Exists(file) && IconPng(bundlePath) is { } png)
-                File.WriteAllBytes(file, png);
-            if (File.Exists(file))
-            {
-                using var stream = File.OpenRead(file);
-                bitmap = Bitmap.DecodeToWidth(stream, size);
-            }
-        }
-        catch
-        {
-            bitmap = null;
-        }
-
-        IconCache[bundlePath] = bitmap;
-        return bitmap;
-    }
-
     /// <summary>NSWorkspace iconForFile → PNG bytes.</summary>
-    private static byte[]? IconPng(string bundlePath)
+    public static byte[]? IconPng(string bundlePath)
     {
         var image = Send(Workspace, Sel("iconForFile:"), NSString(bundlePath));
         if (image == IntPtr.Zero) return null;

@@ -7,6 +7,8 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- The .exe icon on Windows; macOS uses the .icns in the app bundle. -->
+    <ApplicationIcon>Assets\inkdot.ico</ApplicationIcon>
     <!-- OpenTabletDriver's async conventions; same suppressions it uses itself. -->
     <NoWarn>$(NoWarn);VSTHRD100;VSTHRD101;VSTHRD110;VSTHRD200</NoWarn>
   </PropertyGroup>

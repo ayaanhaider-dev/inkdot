@@ -38,7 +38,7 @@ public sealed class OverlayManager
                     For(from, mainHeight).Canvas.Break();
                 if (screens.FirstOrDefault(s => s.Id == e.To) is { } to)
                 {
-                    var names = MacApps.ScreenNames();
+                    var names = Apps.ScreenNames();
                     string name = $"Screen {to.Index + 1}" + (names.TryGetValue(to.Id, out var n) ? $"  ·  {n}" : "");
                     For(to, mainHeight).Canvas.Arrive(Opposite(edge), new Point(e.X - to.X, e.Y - to.Y), name);
                 }

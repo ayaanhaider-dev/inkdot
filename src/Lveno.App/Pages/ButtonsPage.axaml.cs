@@ -58,7 +58,7 @@ public partial class ButtonsPage : UserControl
         var stored = s.Profile.BindingSettings.PenButtons;
         _all = Enumerable.Range(0, ButtonCount).Select(i => i < stored.Count ? stored[i] : null).ToList();
         _rules = shell.Config.AppRules
-            .Select(r => new AppRule { App = r.App, BundlePath = r.BundlePath ?? MacApps.FindBundle(r.App), Buttons = r.Buttons.ToList(), PenScroll = r.PenScroll })
+            .Select(r => new AppRule { App = r.App, BundlePath = r.BundlePath ?? Apps.FindBundle(r.App), Buttons = r.Buttons.ToList(), PenScroll = r.PenScroll })
             .ToList();
         _penScroll = shell.Config.PenScroll;
         if (_selected != null)
@@ -89,7 +89,7 @@ public partial class ButtonsPage : UserControl
         {
             ScopeTitle.Text = _selected.App;
             ScopeHint.Text = $"Only while {_selected.App} is the app in front.";
-            var icon = MacApps.Icon(_selected.BundlePath);
+            var icon = Apps.Icon(_selected.BundlePath);
             ScopeIcon.Source = icon;
             ScopeIconBox.IsVisible = icon != null;
             RemoveAppButton.Content = $"Remove {_selected.App}";
@@ -146,7 +146,7 @@ public partial class ButtonsPage : UserControl
         {
             content.Children.Add(new Path { Classes = { "icon" }, Data = (Avalonia.Media.Geometry)this.FindResource("Icon.AllApps")!, Width = 16, Height = 16, Margin = new Thickness(4, 0, 0, 0) });
         }
-        else if (MacApps.Icon(bundlePath) is { } icon)
+        else if (Apps.Icon(bundlePath) is { } icon)
         {
             content.Children.Add(new Image { Source = icon, Width = 22, Height = 22 });
         }
@@ -164,7 +164,7 @@ public partial class ButtonsPage : UserControl
         menu.Opening += (_, _) =>
         {
             menu.Items.Clear();
-            var apps = MacApps.RunningApps().Where(a => _rules.All(r => !r.App.Equals(a.Name, StringComparison.OrdinalIgnoreCase))).ToList();
+            var apps = Apps.RunningApps().Where(a => _rules.All(r => !r.App.Equals(a.Name, StringComparison.OrdinalIgnoreCase))).ToList();
             if (apps.Count == 0)
             {
                 menu.Items.Add(new MenuItem { Header = "Open the app first, then add it here.", IsEnabled = false });
@@ -173,7 +173,7 @@ public partial class ButtonsPage : UserControl
             foreach (var app in apps)
             {
                 var item = new MenuItem { Header = app.Name };
-                if (MacApps.Icon(app.BundlePath) is { } icon)
+                if (Apps.Icon(app.BundlePath) is { } icon)
                     item.Icon = new Image { Source = icon, Width = 18, Height = 18 };
                 item.Click += (_, _) =>
                 {

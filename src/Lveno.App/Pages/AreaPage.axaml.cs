@@ -49,7 +49,7 @@ public partial class AreaPage : UserControl
         EdgePushToggle.IsEnabled = s.Displays.Count > 1;
         Screens.Displays = s.Displays;
         Screens.Names = s.ScreenNames;
-        Screens.Wallpapers = MacApps.Wallpapers();
+        Screens.Wallpapers = Apps.Wallpapers();
         Screens.CursorIndex = ScreenLayout.CursorScreen(s.Displays);
         _screen = s.CurrentScreenIndex();
         MatchShape.IsChecked = s.Absolute.LockAspectRatio;

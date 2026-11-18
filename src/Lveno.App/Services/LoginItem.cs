@@ -1,7 +1,8 @@
 namespace Lveno.App.Services;
 
 /// <summary>
-/// Starts Lveno quietly (menu bar only) when you log in, using a per-user LaunchAgent.
+/// Starts InkDot quietly (menu bar / tray only) when you log in: a per-user LaunchAgent on macOS,
+/// a Run entry in the registry on Windows.
 /// </summary>
 public static class LoginItem
 {
@@ -29,11 +30,17 @@ public static class LoginItem
         }
     }
 
-    /// <summary>The .app bundle this copy runs from, or null when running from a build folder.</summary>
+    /// <summary>The .app bundle (macOS) or InkDot.exe (Windows) this copy runs from, or null when running from a build folder.</summary>
     public static string? BundlePath
     {
         get
         {
+            if (OperatingSystem.IsWindows())
+            {
+                // An installed copy, not a build folder under bin/.
+                var exe = Environment.ProcessPath;
+                return exe != null && !exe.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar) ? exe : null;
+            }
             // …/InkDot.app/Contents/MacOS/
             var dir = new DirectoryInfo(AppContext.BaseDirectory.TrimEnd('/'));
             var bundle = dir.Parent?.Parent;
@@ -41,12 +48,32 @@ public static class LoginItem
         }
     }
 
-    public static bool IsAvailable => OperatingSystem.IsMacOS() && BundlePath != null;
+    public static bool IsAvailable => (OperatingSystem.IsMacOS() || OperatingSystem.IsWindows()) && BundlePath != null;
 
-    public static bool IsEnabled => File.Exists(PlistPath);
+    // Windows: a value under HKCU\Software\Microsoft\Windows\CurrentVersion\Run.
+    private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private const string RunValue = "InkDot";
+
+    public static bool IsEnabled
+    {
+        get
+        {
+            if (!OperatingSystem.IsWindows()) return File.Exists(PlistPath);
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey);
+            return key?.GetValue(RunValue) != null;
+        }
+    }
 
     public static void SetEnabled(bool enabled)
     {
+        if (OperatingSystem.IsWindows())
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(RunKey);
+            if (!enabled) key.DeleteValue(RunValue, throwOnMissingValue: false);
+            else key.SetValue(RunValue, $"\"{BundlePath ?? throw new InvalidOperationException("Install InkDot first.")}\" --background");
+            return;
+        }
+
         if (!enabled)
         {
             File.Delete(PlistPath);

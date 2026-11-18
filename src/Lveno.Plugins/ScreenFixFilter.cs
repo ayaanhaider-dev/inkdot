@@ -37,7 +37,8 @@ public class ScreenFixFilter : IPositionedPipelineElement<IDeviceReport>
 
     public void Consume(IDeviceReport? report)
     {
-        if (report is IAbsolutePositionReport absolute)
+        // Only macOS caches the desktop corner this way; on Windows the pointer works in virtual-desktop pixels.
+        if (report is IAbsolutePositionReport absolute && OperatingSystem.IsMacOS())
             absolute.Position += Correction();
         Emit?.Invoke(report);
     }

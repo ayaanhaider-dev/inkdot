@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using OpenTabletDriver.Plugin;
 using OpenTabletDriver.Plugin.Attributes;
 using OpenTabletDriver.Plugin.DependencyInjection;
@@ -130,22 +129,7 @@ public static class PenScrollEngine
     }
 
     /// <summary>A soft tick: the hold registered, so you can drag or select now.</summary>
-    private static void Tick()
-    {
-        if (!OperatingSystem.IsMacOS()) return;
-        try
-        {
-            Process.Start(new ProcessStartInfo("/usr/bin/afplay")
-            {
-                ArgumentList = { "-v", "0.5", "/System/Library/Sounds/Tink.aiff" },
-                UseShellExecute = false,
-            })?.Dispose();
-        }
-        catch
-        {
-            // No sound is fine; the drag still works.
-        }
-    }
+    private static void Tick() => SystemInput.Tick();
 
     private static void FinishTap()
     {
@@ -188,34 +172,12 @@ public static class PenScrollEngine
     /// <summary>Scrolls the content under the cursor so it moves with the pen.</summary>
     private static void Post(Vector2 delta)
     {
-        if (!OperatingSystem.IsMacOS()) return;
-        _remainder += delta;
+        _remainder += delta * SystemInput.ScrollUnitsPerPoint;
         int dx = (int)_remainder.X, dy = (int)_remainder.Y;
         if (dx == 0 && dy == 0) return;
         _remainder -= new Vector2(dx, dy);
-
-        // Pixel units, continuous (trackpad-like). Positive moves the content down/right, with the pen.
-        var e = CGEventCreateScrollWheelEvent2(IntPtr.Zero, 0, 2, dy, dx, 0);
-        if (e == IntPtr.Zero) return;
-        CGEventSetIntegerValueField(e, ScrollWheelEventIsContinuous, 1);
-        CGEventPost(0, e); // kCGHIDEventTap
-        CFRelease(e);
+        SystemInput.Scroll(dx, dy);
     }
-
-    private const int ScrollWheelEventIsContinuous = 88;
-    private const string CoreGraphics = "/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics";
-
-    [DllImport(CoreGraphics)]
-    private static extern IntPtr CGEventCreateScrollWheelEvent2(IntPtr source, int units, uint wheelCount, int wheel1, int wheel2, int wheel3);
-
-    [DllImport(CoreGraphics)]
-    private static extern void CGEventSetIntegerValueField(IntPtr e, int field, long value);
-
-    [DllImport(CoreGraphics)]
-    private static extern void CGEventPost(int tap, IntPtr e);
-
-    [DllImport("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation")]
-    private static extern void CFRelease(IntPtr cf);
 }
 
 /// <summary>Pen tip for pen scrolling. Set as the tip binding instead of the normal click.</summary>

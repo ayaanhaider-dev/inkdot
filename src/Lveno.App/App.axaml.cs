@@ -76,7 +76,7 @@ public partial class App : Application
             foreach (var i in items) menu.Items.Add(i);
             return new NativeMenuItem(header) { Menu = menu };
         }
-        void Open(string url) => System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("open") { ArgumentList = { url }, UseShellExecute = false });
+        void Open(string url) => Shell.Open(url);
 
         // The app menu ("InkDot") is declared in App.axaml; just show the login tick.
         if (NativeMenu.GetMenu(this) is { } appMenu)
