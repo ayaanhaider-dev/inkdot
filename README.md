@@ -6,8 +6,8 @@
 <p align="center"><b>A calmer, smarter pen tablet driver for macOS.</b><br>By Lveno.</p>
 
 <p align="center">
-  <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4"><img src="docs/launch-video.jpg" width="720" alt="Watch the InkDot launch video"></a><br>
-  <sub>▶ <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4">Watch the launch video</a> (33 s)</sub>
+  <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4"><img src="docs/launch.gif" width="720" alt="InkDot launch video"></a><br>
+  <sub>▶ <a href="https://github.com/ayaanhaider-dev/inkdot/releases/download/v0.1.0/inkdot-launch.mp4">Watch with sound</a> (33 s)</sub>
 </p>
 
 InkDot replaces the stock XP-Pen driver with a fast, clean app that lives in your menu bar.
